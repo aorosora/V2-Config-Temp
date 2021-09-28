@@ -1,0 +1,13 @@
+location = /name/Tun
+    {
+        set $flag 0;
+        if ($content_type ~ "application/grpc") {
+            set $flag "${flag}1";
+        }
+        if ($http_user_agent ~ (your\ customized\ user\ agents)) {
+            set $flag "${flag}2";
+        }
+        if ($flag = "012") {
+            grpc_pass grpc://127.0.0.1:8888;
+        }
+    }

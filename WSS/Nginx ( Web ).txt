@@ -1,0 +1,18 @@
+location = /
+    {
+        proxy_redirect off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $http_host;
+        set $flag 0;
+        if ($http_upgrade = "websocket") {
+            set $flag "${flag}1";
+        }
+        if ($http_user_agent ~ (your\ customized\ user\ agents)) {
+            set $flag "${flag}2";
+        }
+        if ($flag = "012") {
+            proxy_pass http://127.0.0.1:8888;
+        }
+    }

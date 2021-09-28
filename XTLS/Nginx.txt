@@ -1,0 +1,25 @@
+stream {
+  map $ssl_preread_server_name $ssl_server {
+    example.com vless;
+    example2.com web1;
+    }
+
+  upstream vless{
+      server 127.0.0.1:8000;
+  }
+  upstream web1{
+      server 127.0.0.1:8001;
+  }
+
+  server {
+      listen 443;
+      ssl_preread on;
+      proxy_pass $ssl_server;
+      proxy_protocol on;
+  }
+}
+http {
+  server {
+      listen 80 default ipv6only=off;
+      return 301 https://$http_host$request_uri;
+    }
